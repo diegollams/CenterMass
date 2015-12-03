@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Image:
+  = @photo.image
+%p
+  %b X center mass:
+  = @photo.x_center_mass
+%p
+  %b Y center mass:
+  = @photo.y_center_mass
+%p
+  %b White count:
+  = @photo.white_count
+%p
+  %b Black count:
+  = @photo.black_count
+
+= link_to 'Edit', edit_photo_path(@photo)
+\|
+= link_to 'Back', photos_path

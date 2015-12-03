@@ -1,0 +1,8 @@
+= simple_form_for(@photo) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :image,:input_html => {:rows => 30}
+
+  .form-actions
+    = f.button :submit

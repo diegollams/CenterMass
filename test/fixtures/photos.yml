@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  image: MyText
+  x_center_mass: 1
+  y_center_mass: 1
+  white_count: 1
+  black_count: 1
+
+two:
+  image: MyText
+  x_center_mass: 1
+  y_center_mass: 1
+  white_count: 1
+  black_count: 1
