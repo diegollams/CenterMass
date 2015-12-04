@@ -20,7 +20,7 @@
   %tbody
     - @photos.each do |photo|
       %tr
-        %td=  (display_text_with_format photo.image).html_safe
+        %td=  (display_image photo.image,3)
         %td= photo.x_center_mass
         %td= photo.y_center_mass
         %td= photo.white_count
