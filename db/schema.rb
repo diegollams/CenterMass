@@ -18,13 +18,19 @@ ActiveRecord::Schema.define(version: 20151203000046) do
 
   create_table "photos", force: :cascade do |t|
     t.text     "image"
-    t.integer  "x_center_mass",  default: 0
-    t.integer  "y_center_mass",  default: 0
-    t.integer  "white_count",    default: 0
-    t.integer  "black_count",    default: 0
-    t.float    "central_moment", default: 0.0
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "x_center_mass",     default: 0
+    t.integer  "y_center_mass",     default: 0
+    t.integer  "white_count",       default: 0
+    t.integer  "black_count",       default: 0
+    t.integer  "first_moment_HU",   default: 0
+    t.integer  "second_moment_HU",  default: 0
+    t.integer  "third_moment_HU",   default: 0
+    t.integer  "perimeter",         default: 0
+    t.integer  "tetrapixel",        default: 0
+    t.string   "central_moments"
+    t.string   "invariant_moments"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
 end

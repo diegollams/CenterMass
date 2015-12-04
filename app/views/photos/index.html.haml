@@ -8,6 +8,9 @@
       %th Y center mass
       %th White count
       %th Black count
+      %th Primer momento
+      %th Segindo Momento
+      %th Tercer Momento
       %th Momentos centrales
       %th Momentos invariantes
       %th
@@ -22,8 +25,11 @@
         %td= photo.y_center_mass
         %td= photo.white_count
         %td= photo.black_count
-        %td= photo.calculate_central_moments
-        %td= photo.calculate_invariant_moments
+        %td= photo.first_moment_HU
+        %td= photo.second_moment_HU
+        %td= photo.third_moment_HU
+        %td= photo.central_moments
+        %td= photo.invariant_moments
         %td= link_to 'Show', photo
         %td= link_to 'Edit', edit_photo_path(photo)
         %td= link_to 'Destroy', photo, :method => :delete, :data => { :confirm => 'Are you sure?' }

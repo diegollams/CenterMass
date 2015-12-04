@@ -2,7 +2,8 @@
 
 %p
   %b Image:
-  = @photo.image
+  %br
+  = (display_image @photo.image)
 %p
   %b X center mass:
   = @photo.x_center_mass
@@ -15,6 +16,37 @@
 %p
   %b Black count:
   = @photo.black_count
+%p
+  %b First moment:
+  = @photo.first_moment_HU
+%p
+  %b Second moment:
+  = @photo.second_moment_HU
+%p
+  %b third moment:
+  = @photo.third_moment_HU
+%p
+  %b Perimeter:
+  = @photo.perimeter
+%p
+  %b Tetrapixel
+  = @photo.tetrapixel
+%p
+  %b Edges:
+  = @photo.get_edges
+%p
+  %b Vertex:
+  = @photo.get_vertex
+%p
+  %b Contact perimeter:
+  = @photo.get_contact_perimeter
+%p
+  %b Holes:
+  = @photo.get_holes
+%p
+  %b Euler
+  = @photo.get_euler
+
 
 = link_to 'Edit', edit_photo_path(@photo)
 \|
