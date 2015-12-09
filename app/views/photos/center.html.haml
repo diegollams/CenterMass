@@ -1,0 +1,8 @@
+= simple_form_for(@photo,url: center_photo_post_new_photo_path	) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :photos,collection: @photos.collect{ |p| [(display_image p.image), p.id] },:as => :check_boxes
+
+  .form-actions
+    = f.button :submit

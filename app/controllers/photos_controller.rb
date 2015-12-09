@@ -1,10 +1,12 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: [:show, :edit, :update, :destroy]
+  before_action :set_new_photo ,only: [:new,:center]
+  before_action :set_all_photos, only: [:index,:center]
 
   # GET /photos
   # GET /photos.json
   def index
-    @photos = Photo.all
+
   end
 
   # GET /photos/1
@@ -14,7 +16,7 @@ class PhotosController < ApplicationController
 
   # GET /photos/new
   def new
-    @photo = Photo.new
+
   end
 
   # GET /photos/1/edit
@@ -61,7 +63,21 @@ class PhotosController < ApplicationController
     end
   end
 
+  def center
+  end
+
+
+  def center_post
+    @photo  = Photo.merge_images(params[:photo][:photos])
+    redirect_to photo_url(@photo.id)
+  end
   private
+    def set_all_photos
+      @photos = Photo.all
+    end
+    def set_new_photo
+      @photo = Photo.new
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_photo
       @photo = Photo.find(params[:id])

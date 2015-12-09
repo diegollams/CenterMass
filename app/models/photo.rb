@@ -1,7 +1,7 @@
 class Photo < ActiveRecord::Base
+  attr_accessor :photos
   validates :image ,presence: true
-
-  before_save :get_mass_center_pixel_count
+  validate :get_mass_center_pixel_count
 
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
@@ -23,18 +23,25 @@ class Photo < ActiveRecord::Base
         elsif line[x] == WHITE_PIXEL
           self.white_count += 1
         # else RAISE EXEPTION OR VALIDATION ERROR
+        else
+          errors.add(:image, "Caracter '#{line[x]}' no valido")
+          return false
         end
       end
     end
     #update final position of the center, black_count == numberof incidents
-    self.x_center_mass /= black_count
-    self.y_center_mass /= black_count
-
+    if black_count == 0
+      errors.add(:image, "No agrego pixeles negros")
+      return false
+    end
+      self.x_center_mass /= black_count
+      self.y_center_mass /= black_count
     #parse every moment and store them as string
     self.central_moments = calculate_central_moments.to_s
     self.invariant_moments = calculate_invariant_moments.to_s
     calculate_hu_moments
     calculate_perimeter_tetrapixel
+    true
   end
 
 
@@ -94,7 +101,60 @@ class Photo < ActiveRecord::Base
   end
 
 
+
+  def self.merge_images(ids)
+    y_size  = x_size = 0
+    photos = []
+    ids.each do |id|
+      next if id.blank?
+      photo = Photo.find id
+      photos << photo
+      matrix = photo.image.split /\r?\n/
+      if matrix.size >= y_size
+        y_size = matrix.size
+      end
+      if matrix[0].size >= x_size
+        x_size = matrix[0].size
+      end
+    end
+    photo = Photo.new
+    photo.image = Photo.generate_blank_image y_size,x_size
+    photo.save
+    photo_image = photo.image.split /\r?\n/
+    photos.each do |add_photo|
+      matrix = add_photo.image.split /\r?\n/
+      matrix.each_with_index do |line,y|
+        (0..matrix[0].size - 1).each do |x|
+          new_x = photo.x_center_mass - add_photo.x_center_mass
+          new_y = photo.y_center_mass - add_photo.y_center_mass
+          if line[x] == BLACK_PIXEL
+            photo_image[y + new_y][x +new_x]  = BLACK_PIXEL
+          end
+        end
+      end
+    end
+
+
+    photo.image = photo_image.join "\r\n"
+    photo.save
+
+    photo
+  end
+
+
   private
+  def self.generate_blank_image(y,x)
+    new_image = ''
+    (0..y - 1).each do |p|
+      (0..x - 1).each do |q|
+          new_image << WHITE_PIXEL
+      end
+      new_image << "\r\n"
+    end
+    new_image[(new_image.size ) / 2]  = BLACK_PIXEL
+    new_image
+  end
+
   def calculate_perimeter_tetrapixel
     self.perimeter = 0
     self.tetrapixel = 0
