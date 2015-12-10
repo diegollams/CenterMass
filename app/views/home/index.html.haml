@@ -11,8 +11,11 @@
   poder aprender de ellas y poder manipularlas mejor.
   %br
   Este parte esta desarrollada en Ruby on Rails de manera que esta hecha para funcionar de manera web.
-  %h5 Modo de uso
   %p
+    %h5 Codigo fuente
+    El codigo fuente se puede encontrar en
+    =link_to "https://github.com/diegollams/CenterMass","https://github.com/diegollams/CenterMass"
+    %h3 Modo de uso
     Primero se tiene que tomar una imagen ya binarizada y usar el convertidor de imagen a texto de matlab para asi poder generar la imagen en texto
     Una vez generada se pasa a la seccion de
     = link_to "http://grafic-project.herokuapp.com/photos",photos_path
@@ -55,8 +58,39 @@
     Si se desea se puede hacer que el sistema centre diferentes imagenes dando click en el boton azul que dice "New Center Image".
     Donde se mostraran todas la imagenes que han sido introducidas al sistema y donde se selecciona las imagenes que se quiere juntar.
     Esto creara una nueva imagen dentro del sistema que sera la combinacion de todas las anteriores de manera que se acomodaron todas en su centro de masa.
-  %h3 Centro de masa
   %p
+    %h3 Centro de masa
     Primero se barre la matriz de pixeles de manera que podemos contar cuantos pixeles blancos y cuantos negros se tienen,y tambien si se encuentra un pixel negro
     se suma en un contador de 'x' y en uno de 'y' cuanto las posiciones donde se van enontrando y al finalizar el barrido estos dos contadores se divide entre el numero
     de pixeles negros encontrados y de esta manera se consigue las posiciones del centro de masa
+  %p
+    %h3 Momentos Centrales
+    Para los momentos centrales se hizo un barrido de la matriz pero esto para cada momento que se calcularia en este caso un total de 16 momentos,
+    y al hacer el barrido de la matriz se se encontraba un pixel negro entonce se le suma al contando para ese momento
+    usando la siguient formula
+    %b
+      central_moment +=  ((x  - self.x_center_mass) ** p) * ((y  - self.y_center_mass) ** q)
+    donde 'q' y 'p' es el indice del momento que se esta calculando en el momento
+    , 'x y 'y' es la posicion del pixel donde se esta calculando y 'x_center_mass'
+  %p
+    %h3 Momentos Invariantes
+    Se calcula primero los momentos centrales y luego se calculan los 9 momentos invariantes y para cada momento se usa la siguiente formula
+    %b
+      invariant_moments[p][q] = central_moments[p][q] / (central_moments[0][0] ** ((p+q/2)+1))
+    donde 'q' y 'p' es el indice del momento que se esta calculando en el momento y usamos el momento central 00 para la formula
+  %p
+    %h3 Momentos HU
+    Estos se calculan de manera que solo se tiene que obtener los momentos centrales y una vez obteniendolos aplicamos las formulas
+    %b
+      %br
+      self.first_moment_HU = (central_moments[2][0] + central_moments[0][2])
+      %br
+      self.second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))
+      %br
+      self.third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
+    %p
+      %h3 Superposicion
+      Para la superposicion primero encontramos el tamano de las imagenes mas grandes en x y y, despues creamos una imagen vacia apartir de esa imagen vamos aregando al centro de
+      esa imagen las demas imagenes desde su centro de masa para esto sacamos las diferencias de las posiciones de los centros de masa con el centro de nestra nueva imagen
+      y de ahi con esa diferencia sobre escribimos la nueva imagen
+
