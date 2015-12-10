@@ -5,3 +5,58 @@
   %h4 Ici 2015
   %h3 Diego LLamas Velasco
   %h3 Omar Vazquez Acevedo
+%h3 Introduccion
+%p
+  En este proyecto se hizo posible el calculo de diferentes puntos a imagenes binarias, de manera que se pudiera obtener informacion de estas y as
+  poder aprender de ellas y poder manipularlas mejor.
+  %br
+  Este parte esta desarrollada en Ruby on Rails de manera que esta hecha para funcionar de manera web.
+  %h5 Modo de uso
+  %p
+    Primero se tiene que tomar una imagen ya binarizada y usar el convertidor de imagen a texto de matlab para asi poder generar la imagen en texto
+    Una vez generada se pasa a la seccion de
+    = link_to "http://grafic-project.herokuapp.com/photos",photos_path
+    en la cual se prosigue a presiona el boton azul de "New Photo", en el cual se abre una forma donde se mete en el text area la imagen convertida a texto
+    para que funcione de manera correcta se tiene que tomar en cuenta que solo admite  "0"'s y "1"'s y que tiene que estar cada  columna separada por salto de linea.
+
+  %p
+    Una vez creada se muestra la informacion obtenida de esa imagen
+    %ul
+      %li
+        La imagen
+      %li
+        Las cordenadas 'x' y 'y' donde se encuentra el centro de masa
+      %li
+        El numero de pixeles blancos que se contaron en la imagen
+      %li
+        El numero de pixeles negros que se contaron en la imgagen
+      %li
+        El primero momeno HU
+      %li
+        El segundo momeno HU
+      %li
+        El tercero momeno HU
+      %li
+        El perimetro de la imagen de los pixeles negros
+      %li
+        Numero de tetrapixeles
+      %li
+        Numero de esquinas
+      %li
+        Numero de vertices
+      %li
+        El perimetro de contacto
+      %li
+        El numero de euler de la imagen
+    Tambien Es posible ver todas las imagenes que han sido ingresadas en forma de lista
+    = link_to "http://grafic-project.herokuapp.com/photos",photos_path
+    y alguna informacion dando click en el boton azul que dice "show" podemos ver de manera individual
+  %p
+    Si se desea se puede hacer que el sistema centre diferentes imagenes dando click en el boton azul que dice "New Center Image".
+    Donde se mostraran todas la imagenes que han sido introducidas al sistema y donde se selecciona las imagenes que se quiere juntar.
+    Esto creara una nueva imagen dentro del sistema que sera la combinacion de todas las anteriores de manera que se acomodaron todas en su centro de masa.
+  %h3 Centro de masa
+  %p
+    Primero se barre la matriz de pixeles de manera que podemos contar cuantos pixeles blancos y cuantos negros se tienen,y tambien si se encuentra un pixel negro
+    se suma en un contador de 'x' y en uno de 'y' cuanto las posiciones donde se van enontrando y al finalizar el barrido estos dos contadores se divide entre el numero
+    de pixeles negros encontrados y de esta manera se consigue las posiciones del centro de masa

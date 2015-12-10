@@ -6,15 +6,20 @@ class Photo < ActiveRecord::Base
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
 
+  # Calculate the center mas
   def get_mass_center_pixel_count
+    # reset all variable to count again
     self.black_count = 0
     self.white_count = 0
     self.x_center_mass = 0
     self.y_center_mass = 0
     # TODO make a block for the for and only insert the middle part
+    # we separate by newline so we get a array of strings
     matrix = image.split /\r?\n/
+    # go for every element in this matrix of string
     matrix.each_with_index do |line,y|
       #   we will use the first line size as number of colums for uniformity, could be the size of every line
+      # get every pixel in the curren line
       (0..matrix[0].size - 1).each do |x|
         if line[x] == BLACK_PIXEL
           self.black_count += 1
@@ -22,7 +27,7 @@ class Photo < ActiveRecord::Base
           self.y_center_mass += y
         elsif line[x] == WHITE_PIXEL
           self.white_count += 1
-        # else RAISE EXEPTION OR VALIDATION ERROR
+        # else RAISE EXEPTION OR VALIDATION ERROR invalid caracter added
         else
           errors.add(:image, "Caracter '#{line[x]}' no valido")
           return false
@@ -31,22 +36,28 @@ class Photo < ActiveRecord::Base
     end
     #update final position of the center, black_count == numberof incidents
     if black_count == 0
+      # no black pixels added
       errors.add(:image, "No agrego pixeles negros")
       return false
     end
+      # calculate the y and x for the center mass
       self.x_center_mass /= black_count
       self.y_center_mass /= black_count
     #parse every moment and store them as string
     self.central_moments = calculate_central_moments.to_s
     self.invariant_moments = calculate_invariant_moments.to_s
+
     calculate_hu_moments
+
     calculate_perimeter_tetrapixel
     true
   end
 
 
   def calculate_central_moments
+    # we separate by newline so we get a array of strings
     matrix = image.split /\r?\n/
+    # initialize all momments in 0
     moments = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     (0..3).each do |p|
       (0..3 ).each do |q|
@@ -62,11 +73,14 @@ class Photo < ActiveRecord::Base
         moments[p][q] = central_moment
       end
     end
+    # return the array of moments of size  4x4
     moments
   end
 
   def  calculate_invariant_moments
+    # get the central moments before
     central_moments = calculate_central_moments
+    # initialize all momments in 0
     invariant_moments = [[0,0,0],[0,0,0],[0,0,0]]
     (0..2).each do |p|
       (0..2).each do |q|
@@ -76,14 +90,17 @@ class Photo < ActiveRecord::Base
     invariant_moments
   end
 
+  # the total pixels is the sum of black and white
   def total_pixels
     self.white_count + self.black_count
   end
 
+  # calculate the edges
   def get_edges
     ((4 * black_count) + self.perimeter) / 2
   end
 
+  # calculate the vertex
   def get_vertex
     perimeter + tetrapixel
   end
@@ -102,9 +119,11 @@ class Photo < ActiveRecord::Base
 
 
 
+  # get an array of ids of images to merge
   def self.merge_images(ids)
     y_size  = x_size = 0
     photos = []
+    # here we get the size of x and y of the bigger images
     ids.each do |id|
       next if id.blank?
       photo = Photo.find id
@@ -117,6 +136,7 @@ class Photo < ActiveRecord::Base
         x_size = matrix[0].size
       end
     end
+    # generate a new image in white with the bigger sizes
     photo = Photo.new
     photo.image = Photo.generate_blank_image y_size,x_size
     photo.save
@@ -125,6 +145,8 @@ class Photo < ActiveRecord::Base
       matrix = add_photo.image.split /\r?\n/
       matrix.each_with_index do |line,y|
         (0..matrix[0].size - 1).each do |x|
+          # we get the point tha we are going to move the image so it fit the new center mass
+          # we get the center mass of the new image and align the other center masses to that one
           new_x = photo.x_center_mass - add_photo.x_center_mass
           new_y = photo.y_center_mass - add_photo.y_center_mass
           if line[x] == BLACK_PIXEL
@@ -134,7 +156,7 @@ class Photo < ActiveRecord::Base
       end
     end
 
-
+    # add the new line to every column
     photo.image = photo_image.join "\r\n"
     photo.save
 
@@ -174,8 +196,9 @@ class Photo < ActiveRecord::Base
     end
   end
 
-
+  # we use the formulas to get the HU moments
   def calculate_hu_moments
+    # calculate the central moments
     central_moments = calculate_central_moments
     self.first_moment_HU = (central_moments[2][0] + central_moments[0][2])
     self.second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))

@@ -14,8 +14,6 @@
       %th Momentos centrales
       %th Momentos invariantes
       %th
-      %th
-      %th
 
   %tbody
     - @photos.each do |photo|
@@ -30,9 +28,11 @@
         %td= photo.third_moment_HU
         %td= photo.central_moments
         %td= photo.invariant_moments
-        %td= link_to 'Show', photo
-        %td= link_to 'Edit', edit_photo_path(photo)
-        %td= link_to 'Destroy', photo, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td
+          .btn-group
+            = link_to 'Show', photo,class: 'btn btn-primary'
+            = link_to 'Edit', edit_photo_path(photo),class: 'btn btn-warning'
+            = link_to 'Destroy', photo, :method => :delete, :data => { :confirm => 'Are you sure?' },class: 'btn btn-danger'
 
 %br
 
