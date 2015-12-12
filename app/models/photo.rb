@@ -171,10 +171,12 @@ class Photo < ActiveRecord::Base
   end
 
   def get_perimeter_recursive(x,y,matrix)
+    # if we get a pixel out of bound we added to the perimeter array
     if y + 1 >= matrix.size or x + 1 >= matrix[0].size or y - 1 < 0 or x - 1 < 0
       add_perimeter_point x,y
       return
     end
+    # if the pixel has a neiborhood white pixel then we add this point to the array
     if matrix[y + 1][x] == WHITE_PIXEL or matrix[y - 1][x] == WHITE_PIXEL or matrix[y - 1][x  - 1] == WHITE_PIXEL or matrix[y + 1][x  - 1] == WHITE_PIXEL or matrix[y - 1][x  + 1] == WHITE_PIXEL or matrix[y][x  + 1] == WHITE_PIXEL or matrix[y][x  - 1] == WHITE_PIXEL
       add_perimeter_point x,y
     end

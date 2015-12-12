@@ -44,6 +44,11 @@
 %p
   %b Euler
   = @photo.get_euler
+- @photo.get_perimeter
+%p
+  %b Perimetro
+  = @photo.points_x_perimeter
+  = @photo.points_y_perimeter
 
 
 = link_to 'Edit', edit_photo_path(@photo)

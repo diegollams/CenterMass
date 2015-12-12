@@ -93,4 +93,8 @@
       Para la superposicion primero encontramos el tamano de las imagenes mas grandes en x y y, despues creamos una imagen vacia apartir de esa imagen vamos aregando al centro de
       esa imagen las demas imagenes desde su centro de masa para esto sacamos las diferencias de las posiciones de los centros de masa con el centro de nestra nueva imagen
       y de ahi con esa diferencia sobre escribimos la nueva imagen
-
+    %p
+      %h3 Perimetro
+      Barremos toda la matriz de manera que encontremos todos lo pixeles negros. Para cada pixel negro vamos a buscar en toda la vecindad de ese pixel las siguientes condiciones pa
+      para comprobar si es del perimetro. Si algun punto esta en la orrilla de la imagen ya sea superio inferior vertical u horizontal entonces es del perimetro.
+      O si tiene un pixel blanco en la vecinada quiere decir que tambien ese pixel pertenece al perimetro
