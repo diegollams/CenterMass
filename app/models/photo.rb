@@ -2,7 +2,10 @@ class Photo < ActiveRecord::Base
   attr_accessor :photos
   validates :image ,presence: true
   validate :get_mass_center_pixel_count
-
+  attr_accessor :points_x_perimeter
+  attr_accessor :points_y_perimeter
+  @points_x_perimeter = []
+  @points_y_perimeter = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
 
@@ -37,7 +40,7 @@ class Photo < ActiveRecord::Base
     #update final position of the center, black_count == numberof incidents
     if black_count == 0
       # no black pixels added
-      errors.add(:image, "No agrego pixeles negros")
+      errors.add(:image, 'No agrego pixeles negros')
       return false
     end
       # calculate the y and x for the center mass
@@ -65,9 +68,7 @@ class Photo < ActiveRecord::Base
         matrix.each_with_index do |line,y|
           #   we will use the first line size as number of colums for uniformity, could be the size of every line
           (0..matrix[0].size - 1).each do |x|
-            if line[x] == BLACK_PIXEL
-              central_moment +=  ((x  - self.x_center_mass) ** p) * ((y  - self.y_center_mass) ** q)
-            end
+            central_moment += ((x - self.x_center_mass) ** p) * ((y - self.y_center_mass) ** q) if line[x] == BLACK_PIXEL
           end
         end
         moments[p][q] = central_moment
@@ -81,9 +82,9 @@ class Photo < ActiveRecord::Base
     # get the central moments before
     central_moments = calculate_central_moments
     # initialize all momments in 0
-    invariant_moments = [[0,0,0],[0,0,0],[0,0,0]]
-    (0..2).each do |p|
-      (0..2).each do |q|
+    invariant_moments = [[0,0,0,0],[0,0,0],[0,0,0],[0,0,0,0]]
+    (0..3).each do |p|
+      (0..3).each do |q|
         invariant_moments[p][q] = central_moments[p][q] / (central_moments[0][0] ** ((p+q/2)+1))
       end
     end
@@ -164,7 +165,41 @@ class Photo < ActiveRecord::Base
   end
 
 
+  def add_perimeter_point(x,y)
+    @points_x_perimeter << x
+    @points_y_perimeter << y
+  end
+
+  def get_perimeter_recursive(x,y,matrix)
+    if y + 1 >= matrix.size or x + 1 >= matrix[0].size or y - 1 < 0 or x - 1 < 0
+      add_perimeter_point x,y
+      return
+    end
+    if matrix[y + 1][x] == WHITE_PIXEL or matrix[y - 1][x] == WHITE_PIXEL or matrix[y - 1][x  - 1] == WHITE_PIXEL or matrix[y + 1][x  - 1] == WHITE_PIXEL or matrix[y - 1][x  + 1] == WHITE_PIXEL or matrix[y][x  + 1] == WHITE_PIXEL or matrix[y][x  - 1] == WHITE_PIXEL
+      add_perimeter_point x,y
+    end
+  end
+
+
+  def get_perimeter
+    matrix = image.split /\r?\n/
+    # go for every element in this matrix of string
+    @points_x_perimeter = []
+    @points_y_perimeter = []
+    matrix.each_with_index do |line,y|
+      #   we will use the first line size as number of colums for uniformity, could be the size of every line
+      # get every pixel in the curren line
+      (0..matrix[0].size - 1).each do |x|
+        if line[x] == BLACK_PIXEL
+          get_perimeter_recursive x,y,matrix
+        end
+      end
+    end
+  end
+
   private
+
+
   def self.generate_blank_image(y,x)
     new_image = ''
     (0..y - 1).each do |p|
