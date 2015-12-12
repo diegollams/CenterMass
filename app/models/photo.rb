@@ -110,6 +110,7 @@ class Photo < ActiveRecord::Base
     ((4 * black_count) - perimeter) / 2
   end
 
+  # we use the formula to get the numer of holes in the images
   def get_holes
     (((2 * get_contact_perimeter) - perimeter) / 4) + 1 - tetrapixel
   end

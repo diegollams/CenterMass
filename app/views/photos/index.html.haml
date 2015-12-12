@@ -1,40 +1,29 @@
 %h1 Listing photos
+%br
+= link_to 'New Photo', new_photo_path,class: 'btn btn-primary'
+= link_to 'New center Photo', center_new_photo_path,class: 'btn btn-primary'
 
 %table.table
   %thead
     %tr
       %th Image
-      %th X center mass
-      %th Y center mass
+      %th Total
       %th White count
       %th Black count
-      %th Primer momento
-      %th Segindo Momento
-      %th Tercer Momento
-      %th Momentos centrales
-      %th Momentos invariantes
+
       %th
 
   %tbody
     - @photos.each do |photo|
       %tr
         %td=  (display_image photo.image,3)
-        %td= photo.x_center_mass
-        %td= photo.y_center_mass
+        %td= photo.total_pixels
         %td= photo.white_count
         %td= photo.black_count
-        %td= photo.first_moment_HU
-        %td= photo.second_moment_HU
-        %td= photo.third_moment_HU
-        %td= photo.central_moments
-        %td= photo.invariant_moments
         %td
           .btn-group
             = link_to 'Show', photo,class: 'btn btn-primary'
             = link_to 'Edit', edit_photo_path(photo),class: 'btn btn-warning'
             = link_to 'Destroy', photo, :method => :delete, :data => { :confirm => 'Are you sure?' },class: 'btn btn-danger'
 
-%br
 
-= link_to 'New Photo', new_photo_path,class: 'btn btn-primary'
-= link_to 'New center Photo', center_new_photo_path,class: 'btn btn-primary'

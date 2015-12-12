@@ -2,55 +2,78 @@
   %b Image:
   %br
   = (display_image @photo.image)
-%p
-  %b X center mass:
-  = @photo.x_center_mass
-%p
-  %b Y center mass:
-  = @photo.y_center_mass
-%p
-  %b White count:
-  = @photo.white_count
-%p
-  %b Black count:
-  = @photo.black_count
-%p
-  %b First moment:
-  = @photo.first_moment_HU
-%p
-  %b Second moment:
-  = @photo.second_moment_HU
-%p
-  %b third moment:
-  = @photo.third_moment_HU
-%p
-  %b Perimeter:
-  = @photo.perimeter
-%p
-  %b Tetrapixel
-  = @photo.tetrapixel
-%p
-  %b Edges:
-  = @photo.get_edges
-%p
-  %b Vertex:
-  = @photo.get_vertex
-%p
-  %b Contact perimeter:
-  = @photo.get_contact_perimeter
-%p
-  %b Holes:
-  = @photo.get_holes
-%p
-  %b Euler
-  = @photo.get_euler
-- @photo.get_perimeter
-%p
-  %b Perimetro
-  = @photo.points_x_perimeter
-  = @photo.points_y_perimeter
+.div
+  %ul.nav.nav-tabs{:role => 'tablist'}
+    %li.active{:role => "presentation"}
+      %a{"aria-controls" => "moments", "data-toggle" => "tab", :href => "#moments", :role => "tab"} Momentos
+    %li{:role => "presentation"}
+      %a{"aria-controls" => "distance", "data-toggle" => "tab", :href => "#distance", :role => "tab"} Distancia
+    %li{:role => "presentation"}
+      %a{"aria-controls" => "topology", "data-toggle" => "tab", :href => "#topology", :role => "tab"} Topologia
+    %li{:role => "presentation"}
+      %a{'aria-controls' => "chain", "data-toggle" => "tab", :href => "#chain", :role => "tab"} Codigo caedas
+  .tab-content
+    #moments.tab-pane.fade.in.active{:role => "tabpanel"}
+      %p
+        %b X centro de masa:
+        = @photo.x_center_mass
+      %p
+        %b Y center mass:
+        = @photo.y_center_mass
+
+      %p
+        %b First moment:
+        = @photo.first_moment_HU
+      %p
+        %b Second moment:
+        = @photo.second_moment_HU
+      %p
+        %b third moment:
+        = @photo.third_moment_HU
+      %p
+        %b Momentos centrales
+        = @photo.central_moments
+      %p
+        %b Momentos invariantes
+        =@photo.invariant_moments
+    #distance.tab-pane.fade.in{:role => "tabpanel"}
+      %p
+        %b White count:
+        = @photo.white_count
+      %p
+        %b Black count:
+        = @photo.black_count
+      %p
+        %b Numero total:
+        = @photo.total_pixels
+    #topology.tab-pane.fade.in{:role => "tabpanel"}
+      %p
+        %b Perimeter:
+        = @photo.perimeter
+      %p
+        %b Tetrapixel
+        = @photo.tetrapixel
+      %p
+        %b Edges:
+        = @photo.get_edges
+      %p
+        %b Vertex:
+        = @photo.get_vertex
+      %p
+        %b Contact perimeter:
+        = @photo.get_contact_perimeter
+        %p
+          %b Holes:
+          = @photo.get_holes
+        %p
+          %b Euler
+          = @photo.get_euler
+    #chain.tab-pane.fade.in{:role => "tabpanel"}
+      - @photo.get_perimeter
+      %p
+        %b Perimetro
+        =  merge_x_y( @photo.points_x_perimeter,@photo.points_y_perimeter).html_safe
 
 
-= link_to 'Edit', edit_photo_path(@photo)
-\|
-= link_to 'Back', photos_path
+= link_to 'Edit', edit_photo_path(@photo),class: 'btn btn-warning'
+= link_to 'Back', photos_path,class: 'btn btn-default'

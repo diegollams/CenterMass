@@ -19,4 +19,15 @@ module PhotosHelper
       end
     end
   end
+
+  def merge_x_y(exes,eyes)
+    content_tag :ul,class: 'list-inline' do
+      exes.each_with_index do  |x,index |
+        concat(content_tag(:li,class: '') do
+                 "x= #{x}, y= #{eyes[index]} || "
+               end)
+      end
+      concat(content_tag :br)
+    end
+  end
 end

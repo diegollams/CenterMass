@@ -3,7 +3,7 @@
     Proyecto Graficacion
     = link_to "Fotos", photos_path,class: 'btn btn-primary'
   %h4 Ici 2015
-  %h3 Diego LLamas Velasco
+  %h3 Diego Llamas Velasco
   %h3 Omar Vazquez Acevedo
 %h3 Introduccion
 %p
@@ -69,7 +69,7 @@
     y al hacer el barrido de la matriz se se encontraba un pixel negro entonce se le suma al contando para ese momento
     usando la siguient formula
     %b
-      central_moment +=  ((x  - self.x_center_mass) ** p) * ((y  - self.y_center_mass) ** q)
+      central_moment +=  ((x  - x_center_mass) ** p) * ((y  - y_center_mass) ** q)
     donde 'q' y 'p' es el indice del momento que se esta calculando en el momento
     , 'x y 'y' es la posicion del pixel donde se esta calculando y 'x_center_mass'
   %p
@@ -83,11 +83,11 @@
     Estos se calculan de manera que solo se tiene que obtener los momentos centrales y una vez obteniendolos aplicamos las formulas
     %b
       %br
-      self.first_moment_HU = (central_moments[2][0] + central_moments[0][2])
+      first_moment_HU = (central_moments[2][0] + central_moments[0][2])
       %br
-      self.second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))
+      second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))
       %br
-      self.third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
+      third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
     %p
       %h3 Superposicion
       Para la superposicion primero encontramos el tamano de las imagenes mas grandes en x y y, despues creamos una imagen vacia apartir de esa imagen vamos aregando al centro de
