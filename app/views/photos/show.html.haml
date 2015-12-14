@@ -1,7 +1,17 @@
 %p
-  %b Image:
+  .div
+    %ul.nav.nav-tabs{:role => 'tablist'}
+      %li.active{:role => "presentation"}
+        %a{"aria-controls" => "image", "data-toggle" => "tab", :href => "#image", :role => "tab"} Imagen
+      %li{:role => "presentation"}
+        %a{"aria-controls" => "txt", "data-toggle" => "tab", :href => "#txt", :role => "tab"} Imagen txt
+    .tab-content
+      #image.tab-pane.fade.in.active{:role => "tabpanel"}
+        = (display_image @photo.image)
+      #txt.tab-pane.fade.in{:role => "tabpanel"}
+        = display_text_with_format( @photo.image).html_safe
   %br
-  = (display_image @photo.image)
+
 .div
   %ul.nav.nav-tabs{:role => 'tablist'}
     %li.active{:role => "presentation"}
@@ -71,7 +81,7 @@
     #chain.tab-pane.fade.in{:role => "tabpanel"}
       - @photo.get_perimeter
       %p
-        %b Perimetro
+        %b Perimetro(Pares de puntos que conforman el perimeto):
         =  merge_x_y( @photo.points_x_perimeter,@photo.points_y_perimeter).html_safe
 
 
