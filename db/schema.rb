@@ -11,37 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209154345) do
+ActiveRecord::Schema.define(version: 20151203000046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "image_centers", force: :cascade do |t|
-    t.integer  "photo_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "photo_id_id"
-  end
-
-  add_index "image_centers", ["photo_id"], name: "index_image_centers_on_photo_id", using: :btree
-  add_index "image_centers", ["photo_id_id"], name: "index_image_centers_on_photo_id_id", using: :btree
-
   create_table "photos", force: :cascade do |t|
     t.text     "image"
-    t.integer  "x_center_mass",     default: 0
-    t.integer  "y_center_mass",     default: 0
-    t.integer  "white_count",       default: 0
-    t.integer  "black_count",       default: 0
-    t.integer  "first_moment_HU",   default: 0
-    t.integer  "second_moment_HU",  default: 0
-    t.integer  "third_moment_HU",   default: 0
-    t.integer  "perimeter",         default: 0
-    t.integer  "tetrapixel",        default: 0
+    t.integer  "x_center_mass",     limit: 8, default: 0
+    t.integer  "y_center_mass",     limit: 8, default: 0
+    t.integer  "white_count",       limit: 8, default: 0
+    t.integer  "black_count",       limit: 8, default: 0
+    t.integer  "first_moment_HU",   limit: 8, default: 0
+    t.integer  "second_moment_HU",  limit: 8, default: 0
+    t.integer  "third_moment_HU",   limit: 8, default: 0
+    t.integer  "perimeter",         limit: 8, default: 0
+    t.integer  "tetrapixel",        limit: 8, default: 0
     t.string   "central_moments"
     t.string   "invariant_moments"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
-  add_foreign_key "image_centers", "photos"
 end

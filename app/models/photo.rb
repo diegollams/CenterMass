@@ -49,7 +49,7 @@ class Photo < ActiveRecord::Base
     #parse every moment and store them as string
     self.central_moments = calculate_central_moments.to_s
     self.invariant_moments = calculate_invariant_moments.to_s
-
+    #
     calculate_hu_moments
 
     calculate_perimeter_tetrapixel
