@@ -8,14 +8,15 @@ class Photo < ActiveRecord::Base
   @points_y_perimeter = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
+  paginates_per 2
 
   # Calculate the center mas
   def get_mass_center_pixel_count
     # reset all variable to count again
-    self.black_count = 0
-    self.white_count = 0
-    self.x_center_mass = 0
-    self.y_center_mass = 0
+    black_count = 0
+    white_count = 0
+    x_center_mass = 0
+    y_center_mass = 0
     # TODO make a block for the for and only insert the middle part
     # we separate by newline so we get a array of strings
     matrix = image.split /\r?\n/
@@ -25,11 +26,11 @@ class Photo < ActiveRecord::Base
       # get every pixel in the curren line
       (0..matrix[0].size - 1).each do |x|
         if line[x] == BLACK_PIXEL
-          self.black_count += 1
-          self.x_center_mass += x
-          self.y_center_mass += y
+          black_count += 1
+          x_center_mass += x
+          y_center_mass += y
         elsif line[x] == WHITE_PIXEL
-          self.white_count += 1
+          white_count += 1
         # else RAISE EXEPTION OR VALIDATION ERROR invalid caracter added
         else
           errors.add(:image, "Caracter '#{line[x]}' no valido")
@@ -44,12 +45,16 @@ class Photo < ActiveRecord::Base
       return false
     end
       # calculate the y and x for the center mass
-      self.x_center_mass /= black_count
-      self.y_center_mass /= black_count
+      x_center_mass /= black_count
+      y_center_mass /= black_count
     #parse every moment and store them as string
     self.central_moments = calculate_central_moments.to_s
     self.invariant_moments = calculate_invariant_moments.to_s
     #
+    self.black_count = black_count
+    self.white_count = white_count
+    self.x_center_mass = x_center_mass
+    self.y_center_mass = y_center_mass
     calculate_hu_moments
 
     calculate_perimeter_tetrapixel
@@ -68,7 +73,7 @@ class Photo < ActiveRecord::Base
         matrix.each_with_index do |line,y|
           #   we will use the first line size as number of colums for uniformity, could be the size of every line
           (0..matrix[0].size - 1).each do |x|
-            central_moment += ((x - self.x_center_mass) ** p) * ((y - self.y_center_mass) ** q) if line[x] == BLACK_PIXEL
+            central_moment += ((x - self.x_center_mass.to_i) ** p) * ((y - self.y_center_mass.to_i) ** q) if line[x] == BLACK_PIXEL
           end
         end
         moments[p][q] = central_moment
@@ -93,30 +98,30 @@ class Photo < ActiveRecord::Base
 
   # the total pixels is the sum of black and white
   def total_pixels
-    self.white_count + self.black_count
+    self.white_count.to_i + self.black_count.to_i
   end
 
   # calculate the edges
   def get_edges
-    ((4 * black_count) + self.perimeter) / 2
+    ((4 * black_count.to_i) + self.perimeter.to_i) / 2
   end
 
   # calculate the vertex
   def get_vertex
-    perimeter + tetrapixel
+    perimeter.to_i + tetrapixel.to_i
   end
 
   def get_contact_perimeter
-    ((4 * black_count) - perimeter) / 2
+    ((4 * black_count.to_i) - perimeter.to_i) / 2
   end
 
   # we use the formula to get the numer of holes in the images
   def get_holes
-    (((2 * get_contact_perimeter) - perimeter) / 4) + 1 - tetrapixel
+    (((2 * get_contact_perimeter.to_i) - perimeter.to_i) / 4) + 1 - tetrapixel.to_i
   end
 
   def get_euler
-    get_vertex - get_edges  + black_count
+    get_vertex.to_i - get_edges.to_i  + black_count.to_i
   end
 
 
@@ -149,8 +154,8 @@ class Photo < ActiveRecord::Base
         (0..matrix[0].size - 1).each do |x|
           # we get the point tha we are going to move the image so it fit the new center mass
           # we get the center mass of the new image and align the other center masses to that one
-          new_x = photo.x_center_mass - add_photo.x_center_mass
-          new_y = photo.y_center_mass - add_photo.y_center_mass
+          new_x = photo.x_center_mass.to_i - add_photo.x_center_mass.to_i
+          new_y = photo.y_center_mass.to_i - add_photo.y_center_mass.to_i
           if line[x] == BLACK_PIXEL
             photo_image[y + new_y][x +new_x]  = BLACK_PIXEL
           end
@@ -216,22 +221,24 @@ class Photo < ActiveRecord::Base
   end
 
   def calculate_perimeter_tetrapixel
-    self.perimeter = 0
-    self.tetrapixel = 0
+    perimeter = 0
+    tetrapixel = 0
     matrix = image.split /\r?\n/
     matrix.each_with_index do |line,y|
       break if y == matrix.size - 1
       #   we will use the first line size as number of colums for uniformity, could be the size of every line
       (0..matrix[0].size - 1).each do |x|
         if matrix[y][x] == BLACK_PIXEL
-          self.perimeter += 1 if matrix[y][x + 1] == WHITE_PIXEL
-          self.perimeter += 1 if matrix[y + 1][x ] == WHITE_PIXEL
-          self.perimeter += 1 if matrix[y][x - 1] == WHITE_PIXEL and x - 1 > 0
-          self.perimeter += 1 if matrix[y - 1][x ] == WHITE_PIXEL and y + 1 > 0
-          self.tetrapixel += 1 if matrix[y + 1][x] == BLACK_PIXEL and matrix[y][x + 1] == BLACK_PIXEL and matrix[y + 1][x + 1] == BLACK_PIXEL
+          perimeter += 1 if matrix[y][x + 1] == WHITE_PIXEL
+          perimeter += 1 if matrix[y + 1][x ] == WHITE_PIXEL
+          perimeter += 1 if matrix[y][x - 1] == WHITE_PIXEL and x - 1 > 0
+          perimeter += 1 if matrix[y - 1][x ] == WHITE_PIXEL and y + 1 > 0
+          tetrapixel += 1 if matrix[y + 1][x] == BLACK_PIXEL and matrix[y][x + 1] == BLACK_PIXEL and matrix[y + 1][x + 1] == BLACK_PIXEL
         end
       end
     end
+    self.tetrapixel = tetrapixel
+    self.perimeter = perimeter
   end
 
   # we use the formulas to get the HU moments

@@ -9,7 +9,7 @@
       #image.tab-pane.fade.in.active{:role => "tabpanel"}
         = (display_image @photo.image)
       #txt.tab-pane.fade.in{:role => "tabpanel"}
-        = display_text_with_format( @photo.image).html_safe
+        -#= display_text_with_format( @photo.image).html_safe
   %br
 
 .div

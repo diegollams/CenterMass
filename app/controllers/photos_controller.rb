@@ -1,7 +1,7 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: [:show, :edit, :update, :destroy]
   before_action :set_new_photo ,only: [:new,:center]
-  before_action :set_all_photos, only: [:index,:center]
+  before_action :set_all_photos, only: [:index]
 
   # GET /photos
   # GET /photos.json
@@ -64,6 +64,7 @@ class PhotosController < ApplicationController
   end
 
   def center
+    @photos =  Photo.all
   end
 
 
@@ -73,7 +74,7 @@ class PhotosController < ApplicationController
   end
   private
     def set_all_photos
-      @photos = Photo.all
+      @photos = Photo.all.page params[:page]
     end
     def set_new_photo
       @photo = Photo.new

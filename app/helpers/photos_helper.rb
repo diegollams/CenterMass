@@ -4,7 +4,7 @@ module PhotosHelper
     text.gsub /\r?\n/, '<br>'
   end
 
-  def display_image matrix, size = 10
+  def display_image matrix, size = 3
     matrix = matrix.split /\r?\n/
     size_style = "width: #{size}px; height: #{size}px;"
     content_tag :table, class: "image-binary" do
