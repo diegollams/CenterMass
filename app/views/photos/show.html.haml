@@ -7,7 +7,7 @@
         %a{"aria-controls" => "txt", "data-toggle" => "tab", :href => "#txt", :role => "tab"} Imagen txt
     .tab-content
       #image.tab-pane.fade.in.active{:role => "tabpanel"}
-        = (display_image @photo.image)
+        = (display_image @photo.image,5,@photo.x_center_mass,@photo.y_center_mass)
       #txt.tab-pane.fade.in{:role => "tabpanel"}
         -#= display_text_with_format( @photo.image).html_safe
   %br

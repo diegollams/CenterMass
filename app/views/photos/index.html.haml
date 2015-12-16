@@ -16,7 +16,10 @@
   %tbody
     - @photos.each do |photo|
       %tr
-        %td=  (display_image photo.image,3)
+        - if photo.image.size < 11000
+          %td=  (display_image photo.image,3,photo.x_center_mass,photo.y_center_mass)
+        - else
+          %td Imagen Grande para mostrar vaya al individual
         %td= photo.total_pixels
         %td= photo.white_count
         %td= photo.black_count

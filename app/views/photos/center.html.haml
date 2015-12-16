@@ -6,7 +6,7 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :photos,collection: @photos.collect{ |p| [(display_image p.image), p.id] },:as => :check_boxes
+    = f.input :photos,collection: @photos.collect{ |p| [(display_image p.image,3,p.x_center_mass,p.y_center_mass), p.id] },:as => :check_boxes
 
   .form-actions
     = f.button :submit

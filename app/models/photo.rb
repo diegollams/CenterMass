@@ -8,7 +8,7 @@ class Photo < ActiveRecord::Base
   @points_y_perimeter = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
-  paginates_per 2
+  paginates_per 5
 
   # Calculate the center mas
   def get_mass_center_pixel_count
@@ -205,18 +205,22 @@ class Photo < ActiveRecord::Base
     end
   end
 
-  private
+
 
 
   def self.generate_blank_image(y,x)
     new_image = ''
-    (0..y - 1).each do |p|
-      (0..x - 1).each do |q|
+    (0..y - 1).each_with_index do |_,cy|
+      (0..x - 1).each_with_index do |_,cx|
+        if y / 2 == cy and x / 2 == cx
+          new_image << BLACK_PIXEL
+        else
           new_image << WHITE_PIXEL
+        end
       end
       new_image << "\r\n"
     end
-    new_image[(new_image.size ) / 2]  = BLACK_PIXEL
+    # new_image[(new_image.size ) / 2]  = BLACK_PIXEL
     new_image
   end
 
