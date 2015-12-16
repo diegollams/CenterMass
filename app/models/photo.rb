@@ -125,6 +125,9 @@ class Photo < ActiveRecord::Base
   end
 
 
+  def get_f8_strings
+    'F8 string'
+  end
 
   # get an array of ids of images to merge
   def self.merge_images(ids)

@@ -17,12 +17,15 @@
     %li.active{:role => "presentation"}
       %a{"aria-controls" => "moments", "data-toggle" => "tab", :href => "#moments", :role => "tab"} Momentos
     %li{:role => "presentation"}
-      %a{"aria-controls" => "distance", "data-toggle" => "tab", :href => "#distance", :role => "tab"} Distancia
+      %a{'aria-controls' => "distance", "data-toggle" => "tab", :href => "#distance", :role => "tab"} Distancia
     %li{:role => "presentation"}
-      %a{"aria-controls" => "topology", "data-toggle" => "tab", :href => "#topology", :role => "tab"} Topologia
+      %a{'aria-controls' => 'topology', 'data-toggle' => "tab", :href => "#topology", :role => "tab"} Topologia
+    %li{:role => "presentation",id: 'a'}
+      %a{'aria-controls' => "perimeter", "data-toggle" => "tab", :href => "#perimeter", :role => "tab"} Perimetro
     %li{:role => "presentation"}
-      %a{'aria-controls' => "chain", "data-toggle" => "tab", :href => "#chain", :role => "tab"} Codigo caedas
+      = link_to " Codigo caedas",photo_strings_path(@photo,id: @photo.id),remote: true, "data-toggle" => "tab",:role => "tab"
   .tab-content
+    #chain
     #moments.tab-pane.fade.in.active{:role => "tabpanel"}
       %p
         %b X centro de masa:
@@ -78,7 +81,7 @@
         %p
           %b Euler
           = @photo.get_euler
-    #chain.tab-pane.fade.in{:role => "tabpanel"}
+    #perimeter.tab-pane.fade.in{:role => "tabpanel"}
       - @photo.get_perimeter
       %p
         %b Perimetro(Pares de puntos que conforman el perimeto):

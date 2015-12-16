@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_action :set_photo, only: [:show, :edit, :update, :destroy]
+  before_action :set_photo, only: [:show, :edit, :update, :destroy,:strings]
   before_action :set_new_photo ,only: [:new,:center]
   before_action :set_all_photos, only: [:index]
 
@@ -67,6 +67,13 @@ class PhotosController < ApplicationController
     @photos =  Photo.all
   end
 
+  def strings
+    @strings = @photo.get_f8_strings
+    respond_to do |format|
+      format.js
+
+    end
+  end
 
   def center_post
     @photo  = Photo.merge_images(params[:photo][:photos])
