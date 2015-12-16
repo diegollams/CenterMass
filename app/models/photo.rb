@@ -128,46 +128,71 @@ class Photo < ActiveRecord::Base
 
   # get an array of ids of images to merge
   def self.merge_images(ids)
-    y_size  = x_size = 0
+    y_size  = x_size =position= 0
     photos = []
     # here we get the size of x and y of the bigger images
-    ids.each do |id|
+    ids.each_with_index do |id,index|
       next if id.blank?
       photo = Photo.find id
       photos << photo
       matrix = photo.image.split /\r?\n/
       if matrix.size >= y_size
         y_size = matrix.size
+        position = index
       end
       if matrix[0].size >= x_size
         x_size = matrix[0].size
+        position = index
       end
     end
     # generate a new image in white with the bigger sizes
-    photo = Photo.new
-    photo.image = Photo.generate_blank_image y_size,x_size
-    photo.save
+    # photo = Photo.new
+    photo = Photo.new image: photos[position].image
     photo_image = photo.image.split /\r?\n/
     photos.each do |add_photo|
-      matrix = add_photo.image.split /\r?\n/
+      new_x = photos[position].x_center_mass.to_i - add_photo.x_center_mass.to_i
+      new_y = photos[position].y_center_mass.to_i - add_photo.y_center_mass.to_i
+      # matrix = add_photo.image.split /\r?\n/
+      matrix = add_white_pixels new_x,new_y,add_photo
       matrix.each_with_index do |line,y|
         (0..matrix[0].size - 1).each do |x|
           # we get the point tha we are going to move the image so it fit the new center mass
           # we get the center mass of the new image and align the other center masses to that one
-          new_x = photo.x_center_mass.to_i - add_photo.x_center_mass.to_i
-          new_y = photo.y_center_mass.to_i - add_photo.y_center_mass.to_i
-          if line[x] == BLACK_PIXEL
-            photo_image[y + new_y][x +new_x]  = BLACK_PIXEL
-          end
+            photo_image[y][x] = matrix[y][x] if matrix[y][x] == BLACK_PIXEL
         end
       end
     end
-
     # add the new line to every column
     photo.image = photo_image.join "\r\n"
     photo.save
 
     photo
+  end
+
+  def self.add_white_pixels(new_x,new_y,add_photo)
+
+
+    matrix = add_photo.image.split /\r?\n/
+    # go for every element in this matrix of string
+    matrix.each do |line|
+      if new_x < 0
+        line << WHITE_PIXEL * (new_x * -1)
+      else
+        line.prepend WHITE_PIXEL * new_x
+      end
+
+    end
+    if new_y <  0
+      (new_y * -1).times do
+        matrix << WHITE_PIXEL * matrix[0].size
+      end
+    else
+      new_y.times do
+        matrix.unshift WHITE_PIXEL * matrix[0].size
+      end
+    end
+    matrix
+
   end
 
 
