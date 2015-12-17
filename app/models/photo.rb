@@ -7,22 +7,32 @@ class Photo < ActiveRecord::Base
   attr_accessor :perimeter_points
   attr_accessor :f8_strings
   attr_accessor :af8_strings
+  attr_accessor :f4_strings
   @points_x_perimeter = []
   @points_y_perimeter = []
   @perimeter_points = []
+  @f4_strings = []
   @f8_strings = []
   @af8_strings = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
   paginates_per 5
-  AF8_MATRIX = [ [ 0, 1, 2, 3, 4, 5, 6, 7],
-                 [ 7, 0, 1, 2, 3, 4, 5, 6],
-                 [ 6, 7, 0, 1, 2, 3, 4, 5],
-                 [ 5, 6, 7, 0, 1, 2, 3, 4],
-                 [ 4, 5, 6, 7, 0, 1, 2, 3],
-                 [ 3, 4, 5, 6, 7, 0, 1, 2],
-                 [ 2, 3, 4, 5, 6, 7, 0, 1],
-                 [ 1, 2, 3, 4, 5, 6, 7, 0]]
+  AF8_MATRIX = [ %w(0 1 2 3 4 5 6 7),
+                 %w(7 0 1 2 3 4 5 6),
+                 %w(6 7 0 1 2 3 4 5),
+                 %w(5 6 7 0 1 2 3 4),
+                 %w(4 5 6 7 0 1 2 3),
+                 %w(3 4 5 6 7 0 1 2),
+                 %w(2 3 4 5 6 7 0 1),
+                 %w(1 2 3 4 5 6 7 0)]
+  F4_MATRIX = [ %w(0 010 01 0121 -1 -1 -1 03),
+                %w(-1 10 1 121 12 -1 -1 3),
+                %w(-1 10 1 121 12 1232 -1 -1),
+                %w(-1 0 -1 21 2 232 23 -1),
+                %w(-1 -1 -1 21 2 232 23 2303),
+                %w(30 -1 -1 1 -1 32 3 303),
+                %w(30 2010 -1 -1 -1 32 3 303),
+                %w(0 010 01 -1 -1 2 -1 03)]
 
   # Calculate the center mas
   def get_mass_center_pixel_count
@@ -160,11 +170,20 @@ class Photo < ActiveRecord::Base
   def get_af8_strings
     @af8_strings = []
     # if haven been calculated uses it if no generate
-    get_f8_strings if @f8_strings.nil?
+    get_f8_strings if @f8_strings.nil? or @f8_strings.empty?
     (0...@f8_strings.size - 1).each do |index|
       @af8_strings << AF8_MATRIX[@f8_strings[index]][@f8_strings[index + 1]]
     end
     @af8_strings
+  end
+
+  def get_f4_strings
+    @f4_strings  = []
+    get_af8_strings if @af8_strings.nil? or @af8_strings.empty?
+    (0...@f8_strings.size - 1).each do |index|
+      @f4_strings << F4_MATRIX[@f8_strings[index]][@f8_strings[index + 1]]
+    end
+    @f4_strings
   end
 
 

@@ -69,6 +69,8 @@ class PhotosController < ApplicationController
 
   def strings
     @f8_strings = @photo.get_f8_strings
+    @af8_strings = @photo.get_af8_strings
+    @f4_strings = @photo.get_f4_strings
     respond_to do |format|
       format.js
 
