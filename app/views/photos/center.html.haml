@@ -1,7 +1,7 @@
 %h2
-  Superposicion de fotos
+  Superposición de fotos
   %p.lead
-    *Seleccione las imagenes que desea superponer y presione
+    *Seleccione las imágenes que desea superponer y presione el botón de 'Superponer'
 = simple_form_for(@photo,url: center_photo_post_new_photo_path	) do |f|
   = f.error_notification
 
@@ -9,5 +9,5 @@
     = f.input :photos,collection: @photos.collect{ |p| [(display_image p.image,3,p.x_center_mass,p.y_center_mass), p.id] },:as => :check_boxes
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, "Superponer"
 

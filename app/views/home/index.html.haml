@@ -1,104 +1,114 @@
 .jumbotron
   %h1
-    Proyecto Graficacion
+    Proyecto final Graficación
     = link_to "Fotos", photos_path,class: 'btn btn-primary'
-  %h4 Ici 2015
+  %h4 Ing. Computación Inteligente, Agosto - Diciembre de 2015
   %h3 Diego Llamas Velasco
-  %h3 Omar Vazquez Acevedo
-%h3 Introduccion
+  %h3 Omar Vázquez Acevedo
+%h3 Introducción
 %p
-  En este proyecto se hizo posible el calculo de diferentes puntos a imagenes binarias, de manera que se pudiera obtener informacion de estas y as
+  En el presente proyecto fue posible deducir el calculo de diferentes puntos a imagenes binarias, de manera que se pudiera obtener información de estas y así
   poder aprender de ellas y poder manipularlas mejor.
   %br
-  Este parte esta desarrollada en Ruby on Rails de manera que esta hecha para funcionar de manera web.
+  Esta parte esta desarrollada en Ruby on Rails por lo cual su funcionamiento está destinado a la web.
   %p
-    %h5 Codigo fuente
-    El codigo fuente se puede encontrar en
-    =link_to "https://github.com/diegollams/CenterMass","https://github.com/diegollams/CenterMass"
-    %h3 Modo de uso
-    Primero se tiene que tomar una imagen ya binarizada y usar el convertidor de imagen a texto de matlab para asi poder generar la imagen en texto
-    Una vez generada se pasa a la seccion de
-    = link_to "http://grafic-project.herokuapp.com/photos",photos_path
-    en la cual se prosigue a presiona el boton azul de "New Photo", en el cual se abre una forma donde se mete en el text area la imagen convertida a texto
-    para que funcione de manera correcta se tiene que tomar en cuenta que solo admite  "0"'s y "1"'s y que tiene que estar cada  columna separada por salto de linea.
+    %h5 Código fuente
+    Puede consultar el código fuente #{link_to "aquí.","https://github.com/diegollams/CenterMass"}
+    %h3 Manual de usuario
+    Primeramente debe seleccionarse una imagen previamente binarizada y usar el convertidor de imagen a texto de matlab para así poder generar la imagen en texto
+    Una vez generada debe ingresar a la sección de
+    = link_to '/photos' "http://grafic-project.herokuapp.com/photos",photos_path
+    de la aplicación en la cual se prosigue a presionar el boton color azul con la leyenda "Nueva Foto", que abre una forma donde se debe pegar en el area correspondiente la imagen convertida a texto.
+    %br
+    %b Importante: Para que la aplicación funcione de la manera debida se tiene que tomar en cuenta que sólo admite caracteres 1 y 0 y que tiene que estar cada fila separada por salto de linea.
 
   %p
-    Una vez creada se muestra la informacion obtenida de esa imagen
+    Una vez creada se muestra la información obtenida de la imagen.
     %ul
       %li
-        La imagen
+        La imagen.
       %li
-        Las cordenadas 'x' y 'y' donde se encuentra el centro de masa
+        Las coordenadas 'x' y 'y' donde se encuentra el centro de masa.
       %li
-        El numero de pixeles blancos que se contaron en la imagen
+        El número de pixeles blancos que se contaron en la imagen.
       %li
-        El numero de pixeles negros que se contaron en la imgagen
+        El número de pixeles negros que se contaron en la imgagen.
       %li
-        El primero momeno HU
+        El primero momento HU.
       %li
-        El segundo momeno HU
+        El segundo momento HU.
       %li
-        El tercero momeno HU
+        El tercer momeno HU.
       %li
-        El perimetro de la imagen de los pixeles negros
+        El perímetro de la imagen tomando en cuenta los pixeles negros.
       %li
-        Numero de tetrapixeles
+        Número de tetrapixeles.
       %li
-        Numero de esquinas
+        Número de esquinas.
       %li
-        Numero de vertices
+        Número de vertices.
       %li
-        El perimetro de contacto
+        El perímetro de contacto.
       %li
-        El numero de euler de la imagen
-    Tambien Es posible ver todas las imagenes que han sido ingresadas en forma de lista
-    = link_to "http://grafic-project.herokuapp.com/photos",photos_path
-    y alguna informacion dando click en el boton azul que dice "show" podemos ver de manera individual
+        El número de euler de la imagen.
+    También Es posible ver todas las imágenes que han sido ingresadas en forma de lista.
+    = #link_to "http://grafic-project.herokuapp.com/photos",photos_path
+    y alguna información. Al presionar el botón color azul con la leyenda "mostrar" podemos ver de manera individual la imagen deseada.
   %p
-    Si se desea se puede hacer que el sistema centre diferentes imagenes dando click en el boton azul que dice "New Center Image".
-    Donde se mostraran todas la imagenes que han sido introducidas al sistema y donde se selecciona las imagenes que se quiere juntar.
-    Esto creara una nueva imagen dentro del sistema que sera la combinacion de todas las anteriores de manera que se acomodaron todas en su centro de masa.
+    Si se desea se puede hacer que el sistema centre diferentes imagenes presionando el boton azul con la leyenda "Nuevo Centro con Imagen", donde se mostrarán todas la imágenes que han sido introducidas al sistema y donde se selecciona las imágenes que se quiere juntar.
+    Esto creará una nueva imagen dentro del sistema que será la combinación de todas las anteriores de manera que todas están acomodadas en su centro de masa.
   %p
     %h3 Centro de masa
-    Primero se barre la matriz de pixeles de manera que podemos contar cuantos pixeles blancos y cuantos negros se tienen,y tambien si se encuentra un pixel negro
-    se suma en un contador de 'x' y en uno de 'y' cuanto las posiciones donde se van enontrando y al finalizar el barrido estos dos contadores se divide entre el numero
-    de pixeles negros encontrados y de esta manera se consigue las posiciones del centro de masa
+    Primero se barre la matriz de pixeles de manera que podemos contar cuantos pixeles blancos y cuantos negros se tienen,y también si se encuentra un pixel negro
+    se suma en un contador de 'x' y en uno de 'y', cuanto las posiciones donde se van enontrando y al finalizar el barrido estos dos contadores se divide entre el número
+    de pixeles negros encontrados y de esta manera se consiguen las posiciones del centro de masa.
   %p
     %h3 Momentos Centrales
-    Para los momentos centrales se hizo un barrido de la matriz pero esto para cada momento que se calcularia en este caso un total de 16 momentos,
-    y al hacer el barrido de la matriz se se encontraba un pixel negro entonce se le suma al contando para ese momento
-    usando la siguient formula
+    Para los momentos centrales se hizo un barrido de la matriz, esto para cada momento que se calcularía, en este caso un total de 16,
+    y al hacer el barrido de la matriz si se encontraba un pixel negro se suma al contandor para ese momento
+    usando la siguiente fórmula:
+    %br
     %b
-      central_moment +=  ((x  - x_center_mass) ** p) * ((y  - y_center_mass) ** q)
-    donde 'q' y 'p' es el indice del momento que se esta calculando en el momento
-    , 'x y 'y' es la posicion del pixel donde se esta calculando y 'x_center_mass'
+      %center
+        %i central_moment +=  ((x  - x_center_mass) ** p) * ((y  - y_center_mass) ** q)
+    Donde 'q' y 'p' son el índice del momento que se está calculando en el momento
+    , 'x y 'y' son la posición del pixel donde se está calculando, y 'x_center_mass', y 'y_center_mass' son las coordenadas del centro de masa de la imagen.
   %p
     %h3 Momentos Invariantes
-    Se calcula primero los momentos centrales y luego se calculan los 9 momentos invariantes y para cada momento se usa la siguiente formula
+    Se calculan primero los momentos centrales y después los 9 momentos invariantes. Para cada momento se utiliza la siguiente fórmula:
+    %br
     %b
-      invariant_moments[p][q] = central_moments[p][q] / (central_moments[0][0] ** ((p+q/2)+1))
-    donde 'q' y 'p' es el indice del momento que se esta calculando en el momento y usamos el momento central 00 para la formula
+      %center
+        %i invariant_moments[p][q] = central_moments[p][q] / (central_moments[0][0] ** ((p+q/2)+1))
+    Donde 'q' y 'p' es el indice del momento que se esta calculando en el momento y usamos el momento central 00 para la fórmula.
   %p
     %h3 Momentos HU
-    Estos se calculan de manera que solo se tiene que obtener los momentos centrales y una vez obteniendolos aplicamos las formulas
+    Estos se calculan de manera que sólo se tiene que obtener los momentos centrales y, con ellos aplicamos las siguientes dos fórmulas:
     %b
       %br
-      first_moment_HU = (central_moments[2][0] + central_moments[0][2])
       %br
-      second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))
+      %b
+        %center
+          %i first_moment_HU = (central_moments[2][0] + central_moments[0][2])
       %br
-      third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
+      %b
+        %center
+          %i second_moment_HU = ((central_moments[2][0] - central_moments[0][2]) ** 2) + (4 * (central_moments[1][1] ** 2))
+      %br
+      %b
+        %center
+          %i third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
     %p
-      %h3 Superposicion
-      Para la superposicion primero encontramos el tamano de las imagenes mas grandes en x y y, despues creamos una imagen vacia apartir de esa imagen vamos aregando al centro de
-      esa imagen las demas imagenes desde su centro de masa para esto sacamos las diferencias de las posiciones de los centros de masa con el centro de nestra nueva imagen
-      y de ahi con esa diferencia sobre escribimos la nueva imagen
+      %h3 Superposición
+      Para la superposición primero encontramos el tamaño de las imágenes más grandes en x y y, después creamos una imagen vacía apartir de esa imagen vamos aregando al centro de
+      ella las demás imágenes desde su centro de masa. Para lograrlo obtenemos las diferencias de las posiciones de los centros de masa con el centro de nuestra nueva imagen
+      y con esa diferencia sobreescribimos la nueva imagen
     %p
-      %h3 Perimetro
-      Barremos toda la matriz de manera que encontremos todos lo pixeles negros. Para cada pixel negro vamos a buscar en toda la vecindad de ese pixel las siguientes condiciones pa
-      para comprobar si es del perimetro. Si algun punto esta en la orrilla de la imagen ya sea superio inferior vertical u horizontal entonces es del perimetro.
-      O si tiene un pixel blanco en la vecinada quiere decir que tambien ese pixel pertenece al perimetro.
-      Una vez obtenidos estos puntos lo que hacemos es ordenamos de manera polar con base al centro de masa todos los puntos por sus cordenas, de esta manera podemos
-      trabajarlos para obtener los puntos en orden del perimetro y haci poder trabajar con las cadenas.
+      %h3 Perímetro
+      Barremos toda la matriz encontrando todos los pixeles negros. Para cada pixel negro vamos a buscar en toda su vecindad las siguientes condiciones
+      para comprobar si es del perimetro. Si algun punto esta en la orrilla de la imagen ya sea superior, inferior, vertical u horizontal, entonces pertenece al perímetro.
+      O si tiene un pixel blanco en la vecinadad,  ese pixel pertenece al perímetro.
+      Una vez obtenidos estos puntos ordenamos de manera polar con base al centro de masa todos los puntos por sus coordenas, de esta manera podemos
+      trabajarlos para obtener los puntos en orden del perímetro y así poder trabajar con las cadenas.
 
 

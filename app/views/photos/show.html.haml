@@ -4,7 +4,7 @@
       %li.active{:role => "presentation"}
         %a{"aria-controls" => "image", "data-toggle" => "tab", :href => "#image", :role => "tab"} Imagen
       %li{:role => "presentation"}
-        %a{"aria-controls" => "txt", "data-toggle" => "tab", :href => "#txt", :role => "tab"} Imagen txt
+        %a{"aria-controls" => "txt", "data-toggle" => "tab", :href => "#txt", :role => "tab"} Imagen en texto
     .tab-content
       #image.tab-pane.fade.in.active{:role => "tabpanel"}
         = (display_image @photo.image,5,@photo.x_center_mass,@photo.y_center_mass)
@@ -19,9 +19,9 @@
     %li{:role => "presentation"}
       %a{'aria-controls' => "distance", "data-toggle" => "tab", :href => "#distance", :role => "tab"} Distancia
     %li{:role => "presentation"}
-      %a{'aria-controls' => 'topology', 'data-toggle' => "tab", :href => "#topology", :role => "tab"} Topologia
+      %a{'aria-controls' => 'topology', 'data-toggle' => "tab", :href => "#topology", :role => "tab"} Topología
     %li{:role => "presentation",id: 'a'}
-      %a{'aria-controls' => "perimeter", "data-toggle" => "tab", :href => "#perimeter", :role => "tab"} Perimetro
+      %a{'aria-controls' => "perimeter", "data-toggle" => "tab", :href => "#perimeter", :role => "tab"} Perímetro
     %li{:role => "presentation"}
       = link_to " Codigo caedas",photo_strings_path(@photo,id: @photo.id),remote: true
       %a{'aria-controls' => "chain", "data-toggle" => "tab", :href => "#chain", :role => "tab",id: 'cadena'}
@@ -29,66 +29,66 @@
     #chain.tab-pane.fade.in{:role => "tabpanel"}
     #moments.tab-pane.fade.in.active{:role => "tabpanel"}
       %p
-        %b X centro de masa:
+        %b 'X' centro de masa:
         = @photo.x_center_mass
       %p
-        %b Y center mass:
+        %b 'Y' centro de masa:
         = @photo.y_center_mass
 
       %p
-        %b First moment:
+        %b Primer momento:
         = @photo.first_moment_HU
       %p
-        %b Second moment:
+        %b Segundo momento:
         = @photo.second_moment_HU
       %p
-        %b third moment:
+        %b Tercer momento:
         = @photo.third_moment_HU
       %p
-        %b Momentos centrales
+        %b Momentos centrales:
         = @photo.central_moments
       %p
-        %b Momentos invariantes
+        %b Momentos invariantes:
         =@photo.invariant_moments
     #distance.tab-pane.fade.in{:role => "tabpanel"}
       %p
-        %b White count:
+        %b Pixeles blancos:
         = @photo.white_count
       %p
-        %b Black count:
+        %b Pixeles negros:
         = @photo.black_count
       %p
-        %b Numero total:
+        %b Número total:
         = @photo.total_pixels
     #topology.tab-pane.fade.in{:role => "tabpanel"}
       %p
-        %b Perimeter:
+        %b Perímetro:
         = @photo.perimeter
       %p
-        %b Tetrapixel
+        %b Tetrapixel:
         = @photo.tetrapixel
       %p
-        %b Edges:
+        %b Esquinas:
         = @photo.get_edges
       %p
-        %b Vertex:
+        %b Vértices:
         = @photo.get_vertex
       %p
-        %b Contact perimeter:
+        %b Perímetro de contacto:
         = @photo.get_contact_perimeter
         %p
-          %b Holes:
+          %b Agujeros:
           = @photo.get_holes
         %p
-          %b Euler
+          %b Euler:
           = @photo.get_euler
     #perimeter.tab-pane.fade.in{:role => "tabpanel"}
 
       %p
-        %b Perimetro(Pares de puntos que conforman el perimeto):
+        %b Perimetro (Pares de puntos que conforman el perímetro):
         %br
         = @photo.sorted_perimeter
 
 
-= link_to 'Edit', edit_photo_path(@photo),class: 'btn btn-warning'
-= link_to 'Back', photos_path,class: 'btn btn-default'
+= link_to 'Editar', edit_photo_path(@photo),class: 'btn btn-warning'
+= link_to 'Atrás', photos_path,class: 'btn btn-default'

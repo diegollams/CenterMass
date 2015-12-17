@@ -1,15 +1,15 @@
-%h1 Listing photos
+%h1 Fotos
 %br
-= link_to 'New Photo', new_photo_path,class: 'btn btn-primary'
-= link_to 'New center Photo', center_new_photo_path,class: 'btn btn-primary'
+= link_to 'Nueva Foto', new_photo_path,class: 'btn btn-primary'
+= link_to 'Nuevo Centro con Imagen', center_new_photo_path,class: 'btn btn-primary'
 
 %table.table
   %thead
     %tr
-      %th Image
+      %th Imagen
       %th Total
-      %th White count
-      %th Black count
+      %th Pixeles blancos
+      %th Pixeles negros
 
       %th
 
@@ -19,15 +19,15 @@
         - if photo.image.size < 11000
           %td=  (display_image photo.image,3,photo.x_center_mass,photo.y_center_mass)
         - else
-          %td Imagen Grande para mostrar vaya al individual
+          %td Imagen Grande, para mostrar vaya al individual.
         %td= photo.total_pixels
         %td= photo.white_count
         %td= photo.black_count
         %td
           .btn-group
-            = link_to 'Show', photo,class: 'btn btn-primary'
-            = link_to 'Edit', edit_photo_path(photo),class: 'btn btn-warning'
-            = link_to 'Destroy', photo, :method => :delete, :data => { :confirm => 'Are you sure?' },class: 'btn btn-danger'
+            = link_to 'Mostrar', photo,class: 'btn btn-primary'
+            = link_to 'Editar', edit_photo_path(photo),class: 'btn btn-warning'
+            = link_to 'Eliminar', photo, :method => :delete, :data => { :confirm => '¿Está seguro?' },class: 'btn btn-danger'
 
 
 = paginate @photos,:theme => 'twitter-bootstrap-3'

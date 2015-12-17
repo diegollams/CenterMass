@@ -1,10 +1,10 @@
 %p.lead
-  *Agregar imagen imagen binarizada convertida a texto, separa con salto de linea cada renglon
+  *Agregar imagen binarizada convertida a texto, separar con salto de línea cada renglón.
 = simple_form_for(@photo) do |f|
   = f.error_notification
 
   .form-inputs
-    = f.input :image,:input_html => {:rows => 30}
+    = f.input :image, :input_html => {:rows => 30}
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, 'Agregar imagen'
