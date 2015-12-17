@@ -8,12 +8,14 @@ class Photo < ActiveRecord::Base
   attr_accessor :f8_strings
   attr_accessor :af8_strings
   attr_accessor :f4_strings
+  attr_accessor :vcc_strings
   @points_x_perimeter = []
   @points_y_perimeter = []
   @perimeter_points = []
   @f4_strings = []
   @f8_strings = []
   @af8_strings = []
+  @vcc_strings = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
   paginates_per 5
@@ -25,14 +27,19 @@ class Photo < ActiveRecord::Base
                  %w(3 4 5 6 7 0 1 2),
                  %w(2 3 4 5 6 7 0 1),
                  %w(1 2 3 4 5 6 7 0)]
-  F4_MATRIX = [ %w(0 010 01 0121 -1 -1 -1 03),
-                %w(-1 10 1 121 12 -1 -1 3),
-                %w(-1 10 1 121 12 1232 -1 -1),
-                %w(-1 0 -1 21 2 232 23 -1),
-                %w(-1 -1 -1 21 2 232 23 2303),
-                %w(30 -1 -1 1 -1 32 3 303),
-                %w(30 2010 -1 -1 -1 32 3 303),
-                %w(0 010 01 -1 -1 2 -1 03)]
+  F4_MATRIX =[[ '0','010',	'01',	'0121','','','','03' ],
+                [ '','10','1','121''12',	'','','3' ],
+                [ '',	'10',	'1','121','12',	'1232','','' ],
+                [ '',	'0',	'',		'21',	'2',	'232',	'23',	'' ],
+                [ '',	'',		'',		'21',	'2',	'232',	'23',	'2303' ],
+                [ '30',	'',		'',		'1',	'',		'32',	'3',	'303' ],
+                [ '30',	'2010',	'*',	'',		'',		'32',	'3',	'303' ],
+                [ '0',	'010',	'01',	'',		'',		'2',	'',		'03' ] ]
+  VCC_MATRIX =  [	%w(0 1 * 2),
+                   %w(2 0 1 *),
+                   %w(* 2 0 1),
+                   %w(1 * 2 0)]
+
 
   # Calculate the center mas
   def get_mass_center_pixel_count
@@ -153,8 +160,10 @@ class Photo < ActiveRecord::Base
     @f8_strings = []
     perimeter  = sorted_perimeter
     (0...perimeter.size - 1).each do |index|
+
       x_value = perimeter[index][:x] - perimeter[index + 1][:x]
       y_value = perimeter[index][:y] - perimeter[index + 1][:y]
+
       @f8_strings << 0 if x_value == - 1 and y_value == 0
       @f8_strings << 1 if x_value == - 1 and y_value == - 1
       @f8_strings << 2 if x_value == 0 and y_value == - 1
@@ -184,6 +193,16 @@ class Photo < ActiveRecord::Base
       @f4_strings << F4_MATRIX[@f8_strings[index]][@f8_strings[index + 1]]
     end
     @f4_strings
+  end
+
+  def get_vcc_string
+    @vcc_strings = []
+    f4 = @f4_strings || get_f4_strings
+    f4 = f4.join ''
+    (0...f4.size - 1).each do |index|
+      @vcc_strings << VCC_MATRIX[f4[index].to_i][f4[index + 1].to_i]
+    end
+    @vcc_strings
   end
 
 

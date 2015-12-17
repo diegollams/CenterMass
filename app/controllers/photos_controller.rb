@@ -71,6 +71,7 @@ class PhotosController < ApplicationController
     @f8_strings = @photo.get_f8_strings
     @af8_strings = @photo.get_af8_strings
     @f4_strings = @photo.get_f4_strings
+    @vcc_strings = @photo.get_vcc_string
     respond_to do |format|
       format.js
 
