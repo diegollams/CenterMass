@@ -4,11 +4,25 @@ class Photo < ActiveRecord::Base
   validate :get_mass_center_pixel_count
   attr_accessor :points_x_perimeter
   attr_accessor :points_y_perimeter
+  attr_accessor :perimeter_points
+  attr_accessor :f8_strings
+  attr_accessor :af8_strings
   @points_x_perimeter = []
   @points_y_perimeter = []
+  @perimeter_points = []
+  @f8_strings = []
+  @af8_strings = []
   BLACK_PIXEL = '1'
   WHITE_PIXEL = '0'
   paginates_per 5
+  AF8_MATRIX = [ [ 0, 1, 2, 3, 4, 5, 6, 7],
+                 [ 7, 0, 1, 2, 3, 4, 5, 6],
+                 [ 6, 7, 0, 1, 2, 3, 4, 5],
+                 [ 5, 6, 7, 0, 1, 2, 3, 4],
+                 [ 4, 5, 6, 7, 0, 1, 2, 3],
+                 [ 3, 4, 5, 6, 7, 0, 1, 2],
+                 [ 2, 3, 4, 5, 6, 7, 0, 1],
+                 [ 1, 2, 3, 4, 5, 6, 7, 0]]
 
   # Calculate the center mas
   def get_mass_center_pixel_count
@@ -126,8 +140,34 @@ class Photo < ActiveRecord::Base
 
 
   def get_f8_strings
-    'F8 string'
+    @f8_strings = []
+    perimeter  = sorted_perimeter
+    (0...perimeter.size - 1).each do |index|
+      x_value = perimeter[index][:x] - perimeter[index + 1][:x]
+      y_value = perimeter[index][:y] - perimeter[index + 1][:y]
+      @f8_strings << 0 if x_value == - 1 and y_value == 0
+      @f8_strings << 1 if x_value == - 1 and y_value == - 1
+      @f8_strings << 2 if x_value == 0 and y_value == - 1
+      @f8_strings << 3 if x_value == 1 and y_value == - 1
+      @f8_strings << 4 if x_value == 1 and y_value == 0
+      @f8_strings << 5 if x_value == 1 and y_value == 1
+      @f8_strings << 6 if x_value == 0 and y_value == 1
+      @f8_strings << 7 if x_value == -1 and y_value == 1
+    end
+    @f8_strings
   end
+
+  def get_af8_strings
+    @af8_strings = []
+    # if haven been calculated uses it if no generate
+    get_f8_strings if @f8_strings.nil?
+    (0...@f8_strings.size - 1).each do |index|
+      @af8_strings << AF8_MATRIX[@f8_strings[index]][@f8_strings[index + 1]]
+    end
+    @af8_strings
+  end
+
+
 
   # get an array of ids of images to merge
   def self.merge_images(ids)
@@ -172,9 +212,15 @@ class Photo < ActiveRecord::Base
     photo
   end
 
+  def sorted_perimeter
+    # if haven been calculated uses it if no generate
+    get_perimeter if @perimeter_points.nil?
+    @perimeter_points.sort!{|a,b| Math.atan2(a[:y] - self.y_center_mass.to_i,a[:x] - self.x_center_mass.to_i ) <=>  Math.atan2(b[:y] - self.y_center_mass.to_f,b[:x] - self.x_center_mass.to_f )}
+    @perimeter_points
+  end
+
+  # add columns and rows depending in the number of element we want to add
   def self.add_white_pixels(new_x,new_y,add_photo)
-
-
     matrix = add_photo.image.split /\r?\n/
     # go for every element in this matrix of string
     matrix.each do |line|
@@ -200,6 +246,7 @@ class Photo < ActiveRecord::Base
 
 
   def add_perimeter_point(x,y)
+    @perimeter_points << {x: x,y: y}
     @points_x_perimeter << x
     @points_y_perimeter << y
   end
@@ -222,6 +269,7 @@ class Photo < ActiveRecord::Base
     # go for every element in this matrix of string
     @points_x_perimeter = []
     @points_y_perimeter = []
+    @perimeter_points = []
     matrix.each_with_index do |line,y|
       #   we will use the first line size as number of colums for uniformity, could be the size of every line
       # get every pixel in the curren line
@@ -231,6 +279,7 @@ class Photo < ActiveRecord::Base
         end
       end
     end
+    @perimeter_points
   end
 
 
@@ -282,5 +331,19 @@ class Photo < ActiveRecord::Base
     self.third_moment_HU = ((central_moments[3][0] - (3 * central_moments[1][2])) ** 2) + ((((3 * central_moments[2][1]) - central_moments[0][3])) ** 2)
 
   end
+
+
+  # generate a new photo only with the perimeter of the image in black pixels
+  def generate_perimeter_image
+    matrix = image.split /\r?\n/
+    matrix  = Photo.generate_blank_image matrix.size,matrix[0].size
+    matrix = matrix.split /\r?\n/
+    get_perimeter
+    (0..@points_y_perimeter.size - 1).each do |index|
+      matrix[@points_y_perimeter[index]][@points_x_perimeter[index]] = BLACK_PIXEL
+    end
+    Photo.create image: matrix.join( "\r\n")
+  end
+
 
 end

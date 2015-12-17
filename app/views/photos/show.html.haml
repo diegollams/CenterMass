@@ -82,10 +82,11 @@
           %b Euler
           = @photo.get_euler
     #perimeter.tab-pane.fade.in{:role => "tabpanel"}
-      - @photo.get_perimeter
+
       %p
         %b Perimetro(Pares de puntos que conforman el perimeto):
-        =  merge_x_y( @photo.points_x_perimeter,@photo.points_y_perimeter).html_safe
+        %br
+        = @photo.sorted_perimeter
 
 
 = link_to 'Edit', edit_photo_path(@photo),class: 'btn btn-warning'
